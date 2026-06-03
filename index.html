@@ -1,33 +1,189 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <link
-      rel="shortcut icon"
-      sizes="16x16 32x32 64x64"
-      href="http://nomadcoders.com"
-    />
-    <title>hope - my first website.</title>
-    <meta charset="utf-8" />
-    <meta name="description" content="This is Seoyoung's website" />
-    <meta
-      property="og:image"
-      content="https://www.google.co.kr/imgres?q=%EC%9E%90%EC%97%B0&imgurl=https%3A%2F%2Fimg.freepik.com%2Ffree-photo%2Fmesmerizing-view-lonely-tree-green-fields-blue-sky_181624-23654.jpg%3Fsemt%3Dais_hybrid%26w%3D740%26q%3D80&imgrefurl=https%3A%2F%2Fkr.freepik.com%2Fphotos%2F%25EC%259E%2590%25EC%2597%25B0&docid=R52zv20BM-iryM&tbnid=xaNiwfhjVw0JDM&vet=12ahUKEwiBppeJooqUAxUQh68BHTEmEkkQnPAOegQIExAB..i&w=740&h=525&hcb=2&ved=2ahUKEwiBppeJooqUAxUQh68BHTEmEkkQnPAOegQIExAB"
-    />
-  </head>
-  <body>
-    <h1>Hello this is my website!</h1>
-    <h6>I am a genious.</h6>
-    <ul>
-      <li>beer</li>
-      <li>milk</li>
-      <li>wine</li>
-    </ul>
-    <ol>
-      <li>haha</li>
-      <li>hehe</li>
-      <li>hoho</li>
-    </ol>
-    <a href="http://google.com" target="_blank">Go to google.com</a>
-    <img src="us.jpg" />
-  </body>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Momentum — 오늘도 집중</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nanum+Myeongjo:wght@400;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0c0b;
+      --overlay: rgba(10, 9, 8, 0.55);
+      --surface: rgba(255,255,255,0.06);
+      --surface-hover: rgba(255,255,255,0.10);
+      --border: rgba(255,255,255,0.10);
+      --gold: #d4a853;
+      --gold-light: #f0c97a;
+      --cream: #f5efe4;
+      --muted: rgba(245,239,228,0.50);
+      --danger: #c0392b;
+      --font-display: 'Playfair Display', 'Nanum Myeongjo', serif;
+      --font-body: 'Nanum Myeongjo', serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    html, body { height: 100%; width: 100%; font-family: var(--font-body); color: var(--cream); overflow: hidden; }
+
+    #bg {
+      position: fixed; inset: 0; z-index: 0;
+      background-size: cover; background-position: center; background-color: var(--bg);
+      transition: opacity 1.2s ease;
+    }
+    #bg::after { content: ''; position: absolute; inset: 0; background: var(--overlay); backdrop-filter: blur(1px); }
+    #bg::before {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35; pointer-events: none;
+    }
+
+    #app {
+      position: relative; z-index: 1;
+      height: 100vh; width: 100vw;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      grid-template-columns: 1fr 360px;
+      grid-template-areas: "header sidebar" "center sidebar" "footer footer";
+      padding: 32px 40px; gap: 0;
+      opacity: 0; animation: fadeIn 1.5s ease forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    header { grid-area: header; display: flex; justify-content: space-between; align-items: flex-start; }
+
+    .brand { font-family: var(--font-display); font-size: 13px; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); opacity: 0.8; }
+
+    #weather-display { text-align: right; min-height: 40px; }
+    #weather-display .weather-loc { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    #weather-display .weather-temp { font-family: var(--font-display); font-size: 22px; color: var(--cream); }
+    #weather-display .weather-desc { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+    #center { grid-area: center; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 20px; }
+
+    #clock { font-family: var(--font-mono); font-size: clamp(64px, 8vw, 120px); font-weight: 300; letter-spacing: -0.02em; line-height: 1; color: var(--cream); text-shadow: 0 0 60px rgba(212,168,83,0.15); }
+    #clock .colon { display: inline-block; animation: blink 1s step-end infinite; color: var(--gold); }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    #date-display { margin-top: 8px; font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+
+    #greeting { margin-top: 28px; font-family: var(--font-display); font-size: clamp(20px, 2.5vw, 32px); font-weight: 400; color: var(--cream); opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    #greeting.visible { opacity: 1; transform: translateY(0); }
+    #greeting .name-accent { color: var(--gold-light); }
+
+    #login-form { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    #login-form.visible { opacity: 1; transform: translateY(0); }
+
+    .input-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+    .styled-input { background: none; border: none; border-bottom: 1px solid var(--border); color: var(--cream); font-family: var(--font-display); font-size: 22px; padding: 6px 0; width: 260px; outline: none; transition: border-color 0.3s; caret-color: var(--gold); }
+    .styled-input::placeholder { color: var(--muted); font-size: 18px; }
+    .styled-input:focus { border-bottom-color: var(--gold); }
+
+    .submit-btn { align-self: flex-start; margin-top: 4px; background: none; border: 1px solid var(--gold); color: var(--gold); font-family: var(--font-body); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; padding: 8px 20px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .submit-btn:hover { background: var(--gold); color: var(--bg); }
+
+    #sidebar { grid-area: sidebar; display: flex; flex-direction: column; justify-content: center; padding-left: 40px; }
+
+    .panel { background: var(--surface); border: 1px solid var(--border); backdrop-filter: blur(16px); padding: 24px; }
+    .panel-title { font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .panel-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .todo-input-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .todo-input { flex: 1; background: none; border: none; border-bottom: 1px solid var(--border); color: var(--cream); font-family: var(--font-body); font-size: 14px; padding: 6px 0; outline: none; caret-color: var(--gold); transition: border-color 0.3s; }
+    .todo-input::placeholder { color: var(--muted); }
+    .todo-input:focus { border-bottom-color: var(--gold); }
+
+    .todo-add-btn { background: none; border: 1px solid var(--border); color: var(--gold); width: 28px; height: 28px; cursor: pointer; font-size: 18px; line-height: 1; transition: background 0.2s, border-color 0.2s; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+    .todo-add-btn:hover { background: var(--surface-hover); border-color: var(--gold); }
+
+    #todo-list { list-style: none; max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+    #todo-list::-webkit-scrollbar { width: 2px; }
+    #todo-list::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .todo-item { display: flex; align-items: center; gap: 10px; padding: 8px 6px; border-bottom: 1px solid transparent; transition: background 0.15s, border-color 0.15s; animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+    .todo-item:hover { background: var(--surface-hover); border-bottom-color: var(--border); }
+
+    .todo-check { width: 14px; height: 14px; border: 1px solid var(--border); appearance: none; -webkit-appearance: none; cursor: pointer; position: relative; flex-shrink: 0; transition: border-color 0.2s; }
+    .todo-check:checked { border-color: var(--gold); background: var(--gold); }
+    .todo-check:checked::after { content: '✓'; position: absolute; top: -2px; left: 1px; font-size: 10px; color: var(--bg); }
+
+    .todo-text { flex: 1; font-size: 13px; color: var(--cream); line-height: 1.4; transition: color 0.2s; }
+    .todo-item.done .todo-text { text-decoration: line-through; color: var(--muted); }
+
+    .todo-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; opacity: 0; transition: opacity 0.15s, color 0.15s; padding: 0 2px; }
+    .todo-item:hover .todo-del { opacity: 1; }
+    .todo-del:hover { color: var(--danger); }
+
+    .todo-meta { margin-top: 14px; font-size: 10px; letter-spacing: 0.2em; color: var(--muted); display: flex; justify-content: space-between; }
+    .clear-done { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 10px; letter-spacing: 0.15em; text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s; }
+    .clear-done:hover { color: var(--cream); }
+
+    footer { grid-area: footer; display: flex; justify-content: space-between; align-items: flex-end; }
+    .quote-block { max-width: 500px; }
+    .quote-text { font-family: var(--font-display); font-style: italic; font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .quote-text::before { content: '"'; color: var(--gold); margin-right: 2px; }
+    .quote-text::after  { content: '"'; color: var(--gold); margin-left: 2px; }
+    .bg-credit { font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.2); text-align: right; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div id="bg"></div>
+
+<div id="app">
+  <header>
+    <span class="brand">Momentum</span>
+    <div id="weather-display">
+      <div class="weather-loc" id="weather-loc">위치 확인 중…</div>
+      <div class="weather-temp" id="weather-temp"></div>
+      <div class="weather-desc" id="weather-desc"></div>
+    </div>
+  </header>
+
+  <main id="center">
+    <div id="clock">
+      <span id="h">00</span><span class="colon">:</span><span id="m">00</span><span class="colon">:</span><span id="s">00</span>
+    </div>
+    <div id="date-display"></div>
+    <div id="greeting" class="hidden"></div>
+    <form id="login-form" class="hidden" onsubmit="return false;">
+      <div>
+        <div class="input-label">당신의 이름은?</div>
+        <input class="styled-input" id="name-input" type="text" placeholder="이름을 입력하세요" maxlength="20" autocomplete="off" />
+      </div>
+      <button class="submit-btn" id="login-btn">시작하기 →</button>
+    </form>
+  </main>
+
+  <aside id="sidebar">
+    <div class="panel">
+      <div class="panel-title">오늘의 할 일</div>
+      <div class="todo-input-row">
+        <input class="todo-input" id="todo-input" type="text" placeholder="새 항목 추가…" maxlength="60" />
+        <button class="todo-add-btn" id="todo-add-btn">＋</button>
+      </div>
+      <ul id="todo-list"></ul>
+      <div class="todo-meta">
+        <span id="todo-count">0개 남음</span>
+        <button class="clear-done" id="clear-done-btn">완료 항목 삭제</button>
+      </div>
+    </div>
+  </aside>
+
+  <footer>
+    <div class="quote-block">
+      <div class="quote-text" id="quote"></div>
+    </div>
+    <div class="bg-credit" id="bg-credit"></div>
+  </footer>
+</div>
+
+<!-- ↓ JS 파일 연결 (body 닫히기 직전에 두어야 DOM이 준비된 상태에서 실행됨) -->
+<script src="momentum.js"></script>
+
+</body>
 </html>
